@@ -2,8 +2,13 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include "lexer.h"
+
+    extern int     yylineno;
+    extern char*   yytext;
+    extern int     yyleng;
 %}
 
+%option yylineno
 %option noyywrap
 %option case-insensitive
 
@@ -21,7 +26,7 @@
 "["                         { return T_BRACKT_OP; }
 "]"                         { return T_BRACKT_CL; }
 
-"PROGRAM"                   { printf("Found program start!\n"); return T_PROGRAM; }
+"PROGRAM"                   { return T_PROGRAM; }
 
 "STARTMAIN"                 { return T_MAIN_START; }
 "ENDMAIN"                   { return T_MAIN_END; }
@@ -58,12 +63,15 @@
 
 "TYPEDEF"                   { return T_TYPEDEF; }
 
+[[:alpha:]]+                { return T_WORD; }
 " "                         { return T_SPACE; }
-<<EOF>>                     { printf("End of file\n"); return T_EOF; }
+<<EOF>>                     { return T_EOF; }
 
-.                           { printf("Unknown token!\n"); return T_UNKNOWN; }
+.                           { return T_UNKNOWN; }
 
 %%
+
+void print_token(int token_id);
 
 int main(int argc, char* argv[])
 {
@@ -82,9 +90,24 @@ int main(int argc, char* argv[])
     do
     {
         token = yylex();
+
+        /* debugging reasons */
+        print_token(token);
     }
     while (token != T_EOF);
 
     fclose(yyin);
     yyterminate();
+}
+
+void print_token(int token_id)
+{
+    if      (token_id == T_EOF)
+        printf("End of source file!\n");
+    else if (token_id == T_UNKNOWN)
+        printf("Unknown token!\n");
+    else if (token_id == T_PROGRAM)
+        printf("Start of program!\n");
+    else
+        printf("%s at %d\n", yytext, token_id);
 }
