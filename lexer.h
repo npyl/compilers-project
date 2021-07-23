@@ -58,3 +58,7 @@
 /* everything else */
 #define     T_WORD          500
 #define     T_UNKNOWN       501     // for errors
+#define     T_SPACE         502
+
+#define     T_COMM_LINE     503     // one-line comment
+#define     T_COMM_MULT_LN  504     // multi-line comment
