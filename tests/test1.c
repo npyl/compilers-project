@@ -1,3 +1,4 @@
+PROGRAM test1;
 FUNCTION myfunc1(INT i, CHAR c)
 FUNCTION myfunc2(INT i2)
     RETURN

@@ -77,10 +77,10 @@
 
 %%
 
-// Program:        T_PROGRAM  T_SPACE program_name T_SEMICOLON T_NEW_LINE block_list T_EOF {printf("Found program!\n");}
-//                 ;
-// program_name:   T_WORD
-//                 ;
+Program:            T_PROGRAM  T_SPACE program_name T_SEMICOLON T_NEW_LINE block_list T_EOF {printf("Found program!\n");}
+                    ;
+program_name:       T_WORD
+                    ;
 
 Function:           BEGIN T_SPACE func_name T_PARNTH_OP parameter_list T_PARNTH_CL T_NEW_LINE block_list return_statement END
                     ;
