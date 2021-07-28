@@ -4,15 +4,13 @@
 
     #define YYERROR_VERBOSE 1       /* this should give us more detailed error-messages instead of just "error: syntax error" */
 
-    extern int     yylineno;
-    extern char*   yytext;
-    extern int     yyleng;
+    extern int      yylineno;
+    extern char*    yytext;
+    extern FILE*    yyin;
 
-    extern FILE* yyin;
+    extern int      yylex();
 
-    extern int yylex();
-
-    int yyerror(const char *s);
+    int             yyerror(const char *s);
 %}
 
 %token      T_INT           "INT"
@@ -129,7 +127,11 @@ variable_declarations:
                     ;
 variable_declaration:
                     type T_SPACE variable_name
-                    | variable_declaration T_COMMA T_SPACE variable_declaration
+                    |   type T_SPACE variable_name T_COMMA T_SPACE more_variables_inline
+                    ;
+more_variables_inline:
+                    variable_name
+                    |   variable_name T_COMMA T_SPACE more_variables_inline
                     ;
 variable_name:      T_WORD
                     ;

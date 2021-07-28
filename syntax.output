@@ -15,8 +15,7 @@ Terminals unused in grammar
 
 
 State 53 conflicts: 3 shift/reduce
-State 66 conflicts: 1 shift/reduce
-State 67 conflicts: 1 shift/reduce
+State 64 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -73,24 +72,27 @@ Grammar
    34                      | variable_declarations variable_declarations
 
    35 variable_declaration: type "space" variable_name
-   36                     | variable_declaration "," "space" variable_declaration
+   36                     | type "space" variable_name "," "space" more_variables_inline
 
-   37 variable_name: "WORD"
+   37 more_variables_inline: variable_name
+   38                      | variable_name "," "space" more_variables_inline
 
-   38 type: "INT"
-   39     | "CHAR"
-   40     | "VOID"
+   39 variable_name: "WORD"
+
+   40 type: "INT"
+   41     | "CHAR"
+   42     | "VOID"
 
 
 Terminals, with rules where they appear
 
 "EOF" (0) 0 1
 error (256)
-"INT" (258) 38
-"CHAR" (259) 39
-"VOID" (260) 40
+"INT" (258) 40
+"CHAR" (259) 41
+"VOID" (260) 42
 "." (261)
-"," (262) 8 36
+"," (262) 8 36 38
 "(" (263) 3
 ")" (264) 3
 ";" (265) 1 33
@@ -121,9 +123,9 @@ error (256)
 "struct" (290) 24
 "end struct" (291) 31
 "typedef" (292)
-"WORD" (293) 2 4 10 37
+"WORD" (293) 2 4 10 39
 "Unknown" (294)
-"space" (295) 1 3 7 8 35 36
+"space" (295) 1 3 7 8 35 36 38
 "new line" (296) 1 3 9 11 12 32 33
 
 
@@ -162,11 +164,13 @@ END (56)
 variable_declarations (57)
     on left: 33 34, on right: 12 34
 variable_declaration (58)
-    on left: 35 36, on right: 33 36
-variable_name (59)
-    on left: 37, on right: 35
-type (60)
-    on left: 38 39 40, on right: 7 35
+    on left: 35 36, on right: 33
+more_variables_inline (59)
+    on left: 37 38, on right: 36 38
+variable_name (60)
+    on left: 39, on right: 35 36 37 38
+type (61)
+    on left: 40 41 42, on right: 7 35 36
 
 
 State 0
@@ -512,23 +516,23 @@ State 38
 
 State 39
 
-   38 type: "INT" .
+   40 type: "INT" .
 
-    $default  reduce using rule 38 (type)
+    $default  reduce using rule 40 (type)
 
 
 State 40
 
-   39 type: "CHAR" .
+   41 type: "CHAR" .
 
-    $default  reduce using rule 39 (type)
+    $default  reduce using rule 41 (type)
 
 
 State 41
 
-   40 type: "VOID" .
+   42 type: "VOID" .
 
-    $default  reduce using rule 40 (type)
+    $default  reduce using rule 42 (type)
 
 
 State 42
@@ -580,17 +584,16 @@ State 45
 State 46
 
    33 variable_declarations: variable_declaration . ";" "new line"
-   36 variable_declaration: variable_declaration . "," "space" variable_declaration
 
-    ","  shift, and go to state 54
-    ";"  shift, and go to state 55
+    ";"  shift, and go to state 54
 
 
 State 47
 
    35 variable_declaration: type . "space" variable_name
+   36                     | type . "space" variable_name "," "space" more_variables_inline
 
-    "space"  shift, and go to state 56
+    "space"  shift, and go to state 55
 
 
 State 48
@@ -604,23 +607,23 @@ State 49
 
     3 Function: BEGIN "space" func_name "(" parameter_list ")" . "new line" block_list return_statement END
 
-    "new line"  shift, and go to state 57
+    "new line"  shift, and go to state 56
 
 
 State 50
 
     8 func_parameter: func_parameter "," . "space" func_parameter
 
-    "space"  shift, and go to state 58
+    "space"  shift, and go to state 57
 
 
 State 51
 
     7 func_parameter: type "space" . parameter_name
 
-    "WORD"  shift, and go to state 59
+    "WORD"  shift, and go to state 58
 
-    parameter_name  go to state 60
+    parameter_name  go to state 59
 
 
 State 52
@@ -654,37 +657,31 @@ State 53
 
 State 54
 
-   36 variable_declaration: variable_declaration "," . "space" variable_declaration
+   33 variable_declarations: variable_declaration ";" . "new line"
 
-    "space"  shift, and go to state 61
+    "new line"  shift, and go to state 60
 
 
 State 55
 
-   33 variable_declarations: variable_declaration ";" . "new line"
+   35 variable_declaration: type "space" . variable_name
+   36                     | type "space" . variable_name "," "space" more_variables_inline
 
-    "new line"  shift, and go to state 62
+    "WORD"  shift, and go to state 61
+
+    variable_name  go to state 62
 
 
 State 56
-
-   35 variable_declaration: type "space" . variable_name
-
-    "WORD"  shift, and go to state 63
-
-    variable_name  go to state 64
-
-
-State 57
 
     3 Function: BEGIN "space" func_name "(" parameter_list ")" "new line" . block_list return_statement END
 
     $default  reduce using rule 13 (block_list)
 
-    block_list  go to state 65
+    block_list  go to state 63
 
 
-State 58
+State 57
 
     8 func_parameter: func_parameter "," "space" . func_parameter
 
@@ -692,65 +689,56 @@ State 58
     "CHAR"  shift, and go to state 40
     "VOID"  shift, and go to state 41
 
-    func_parameter  go to state 66
+    func_parameter  go to state 64
     type            go to state 44
 
 
-State 59
+State 58
 
    10 parameter_name: "WORD" .
 
     $default  reduce using rule 10 (parameter_name)
 
 
-State 60
+State 59
 
     7 func_parameter: type "space" parameter_name .
 
     $default  reduce using rule 7 (func_parameter)
 
 
-State 61
-
-   36 variable_declaration: variable_declaration "," "space" . variable_declaration
-
-    "INT"   shift, and go to state 39
-    "CHAR"  shift, and go to state 40
-    "VOID"  shift, and go to state 41
-
-    variable_declaration  go to state 67
-    type                  go to state 47
-
-
-State 62
+State 60
 
    33 variable_declarations: variable_declaration ";" "new line" .
 
     $default  reduce using rule 33 (variable_declarations)
 
 
-State 63
+State 61
 
-   37 variable_name: "WORD" .
+   39 variable_name: "WORD" .
 
-    $default  reduce using rule 37 (variable_name)
+    $default  reduce using rule 39 (variable_name)
 
 
-State 64
+State 62
 
    35 variable_declaration: type "space" variable_name .
+   36                     | type "space" variable_name . "," "space" more_variables_inline
+
+    ","  shift, and go to state 65
 
     $default  reduce using rule 35 (variable_declaration)
 
 
-State 65
+State 63
 
     3 Function: BEGIN "space" func_name "(" parameter_list ")" "new line" block_list . return_statement END
    14 block_list: block_list . block
 
     "main start"   shift, and go to state 11
     "func"         shift, and go to state 12
-    "return"       shift, and go to state 68
+    "return"       shift, and go to state 66
     "while start"  shift, and go to state 13
     "for start"    shift, and go to state 14
     "if start"     shift, and go to state 15
@@ -758,14 +746,14 @@ State 65
     "struct"       shift, and go to state 17
 
     Function          go to state 18
-    return_statement  go to state 69
+    return_statement  go to state 67
     Main              go to state 19
     Struct            go to state 20
     block             go to state 21
     BEGIN             go to state 22
 
 
-State 66
+State 64
 
     8 func_parameter: func_parameter . "," "space" func_parameter
     8               | func_parameter "," "space" func_parameter .
@@ -776,25 +764,21 @@ State 66
     $default  reduce using rule 8 (func_parameter)
 
 
-State 67
+State 65
 
-   36 variable_declaration: variable_declaration . "," "space" variable_declaration
-   36                     | variable_declaration "," "space" variable_declaration .
+   36 variable_declaration: type "space" variable_name "," . "space" more_variables_inline
 
-    ","  shift, and go to state 54
-
-    ","       [reduce using rule 36 (variable_declaration)]
-    $default  reduce using rule 36 (variable_declaration)
+    "space"  shift, and go to state 68
 
 
-State 68
+State 66
 
     9 return_statement: "return" . "new line"
 
-    "new line"  shift, and go to state 70
+    "new line"  shift, and go to state 69
 
 
-State 69
+State 67
 
     3 Function: BEGIN "space" func_name "(" parameter_list ")" "new line" block_list return_statement . END
 
@@ -806,17 +790,27 @@ State 69
     "switch end"  shift, and go to state 36
     "end struct"  shift, and go to state 37
 
-    END  go to state 71
+    END  go to state 70
 
 
-State 70
+State 68
+
+   36 variable_declaration: type "space" variable_name "," "space" . more_variables_inline
+
+    "WORD"  shift, and go to state 61
+
+    more_variables_inline  go to state 71
+    variable_name          go to state 72
+
+
+State 69
 
     9 return_statement: "return" "new line" .
 
     $default  reduce using rule 9 (return_statement)
 
 
-State 71
+State 70
 
     3 Function: BEGIN "space" func_name "(" parameter_list ")" "new line" block_list return_statement END .
    32 END: END . "new line"
@@ -824,3 +818,44 @@ State 71
     "new line"  shift, and go to state 48
 
     $default  reduce using rule 3 (Function)
+
+
+State 71
+
+   36 variable_declaration: type "space" variable_name "," "space" more_variables_inline .
+
+    $default  reduce using rule 36 (variable_declaration)
+
+
+State 72
+
+   37 more_variables_inline: variable_name .
+   38                      | variable_name . "," "space" more_variables_inline
+
+    ","  shift, and go to state 73
+
+    $default  reduce using rule 37 (more_variables_inline)
+
+
+State 73
+
+   38 more_variables_inline: variable_name "," . "space" more_variables_inline
+
+    "space"  shift, and go to state 74
+
+
+State 74
+
+   38 more_variables_inline: variable_name "," "space" . more_variables_inline
+
+    "WORD"  shift, and go to state 61
+
+    more_variables_inline  go to state 75
+    variable_name          go to state 72
+
+
+State 75
+
+   38 more_variables_inline: variable_name "," "space" more_variables_inline .
+
+    $default  reduce using rule 38 (more_variables_inline)
