@@ -1099,7 +1099,7 @@ YY_RULE_SETUP
 case 41:
 YY_RULE_SETUP
 #line 78 "lexer.l"
-{ return T_TAB; }
+{ /* ignore tabs */ }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
 #line 79 "lexer.l"

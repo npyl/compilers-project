@@ -92,7 +92,7 @@ parameter_list:     %empty
 func_parameter:     type T_SPACE parameter_name
                     |   func_parameter T_COMMA T_SPACE func_parameter
                     ;
-return_statement:   T_TAB T_RETURN T_NEW_LINE
+return_statement:   T_RETURN T_NEW_LINE
                     ;
 parameter_name:     T_WORD
                     ;

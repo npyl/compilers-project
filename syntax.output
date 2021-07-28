@@ -13,6 +13,7 @@ Terminals unused in grammar
    "break"
    "typedef"
    "Unknown"
+   "tab"
    "one line comment"
    "multiline comment"
 
@@ -47,7 +48,7 @@ Grammar
     7 func_parameter: type "space" parameter_name
     8               | func_parameter "," "space" func_parameter
 
-    9 return_statement: "tab" "return" "new line"
+    9 return_statement: "return" "new line"
 
    10 parameter_name: "any other element must be treated as a word"
 
@@ -126,7 +127,7 @@ error (256)
 "any other element must be treated as a word" (293) 2 4 10
 "Unknown" (294)
 "space" (295) 1 3 7 8
-"tab" (296) 9
+"tab" (296)
 "new line" (297) 1 3 9 32
 "one line comment" (298)
 "multiline comment" (299)
@@ -514,17 +515,19 @@ State 40
 
     "main start"   shift, and go to state 11
     "func"         shift, and go to state 12
+    "return"       shift, and go to state 42
     "while start"  shift, and go to state 13
     "for start"    shift, and go to state 14
     "if start"     shift, and go to state 15
     "switch"       shift, and go to state 16
     "struct"       shift, and go to state 17
-    "tab"          shift, and go to state 42
 
     "main start"   [reduce using rule 11 (Main)]
     "main start"   [reduce using rule 12 (Struct)]
     "func"         [reduce using rule 11 (Main)]
     "func"         [reduce using rule 12 (Struct)]
+    "return"       [reduce using rule 11 (Main)]
+    "return"       [reduce using rule 12 (Struct)]
     "while start"  [reduce using rule 11 (Main)]
     "while start"  [reduce using rule 12 (Struct)]
     "for start"    [reduce using rule 11 (Main)]
@@ -535,8 +538,6 @@ State 40
     "switch"       [reduce using rule 12 (Struct)]
     "struct"       [reduce using rule 11 (Main)]
     "struct"       [reduce using rule 12 (Struct)]
-    "tab"          [reduce using rule 11 (Main)]
-    "tab"          [reduce using rule 12 (Struct)]
 
     Function          go to state 18
     return_statement  go to state 43
@@ -559,9 +560,9 @@ State 41
 
 State 42
 
-    9 return_statement: "tab" . "return" "new line"
+    9 return_statement: "return" . "new line"
 
-    "return"  shift, and go to state 44
+    "new line"  shift, and go to state 44
 
 
 State 43
@@ -581,9 +582,9 @@ State 43
 
 State 44
 
-    9 return_statement: "tab" "return" . "new line"
+    9 return_statement: "return" "new line" .
 
-    "new line"  shift, and go to state 53
+    $default  reduce using rule 9 (return_statement)
 
 
 State 45
@@ -640,19 +641,12 @@ State 52
     3 Function: BEGIN "space" func_name "(" parameter_list ")" "new line" block_list return_statement END .
    32 END: END . "new line"
 
-    "new line"  shift, and go to state 54
+    "new line"  shift, and go to state 53
 
     $default  reduce using rule 3 (Function)
 
 
 State 53
-
-    9 return_statement: "tab" "return" "new line" .
-
-    $default  reduce using rule 9 (return_statement)
-
-
-State 54
 
    32 END: END "new line" .
 

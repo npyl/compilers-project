@@ -75,7 +75,7 @@ WORD                        {ALPHA}*
 
 {WORD}                      { return T_WORD; }
 " "                         { return T_SPACE; }
-"\t"|"    "                 { return T_TAB; }
+"\t"|"    "                 { /* ignore tabs */ }
 <<EOF>>                     { return T_EOF; }
 
 .                           { return T_UNKNOWN; }
