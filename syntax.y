@@ -82,27 +82,34 @@
 // program_name:   T_WORD
 //                 ;
 
-Function:           BEGIN T_SPACE func_name T_PARNTH_OP parameter_list T_PARNTH_CL T_NEW_LINE return_statement END
+Function:           BEGIN T_SPACE func_name T_PARNTH_OP parameter_list T_PARNTH_CL T_NEW_LINE block_list return_statement END
                     ;
 func_name:          T_WORD
                     ;
 parameter_list:     %empty
-                    | func_parameter
+                    |   func_parameter
                     ;
 func_parameter:     type T_SPACE parameter_name
-                    | func_parameter T_COMMA T_SPACE func_parameter
+                    |   func_parameter T_COMMA T_SPACE func_parameter
                     ;
 return_statement:   T_TAB T_RETURN T_NEW_LINE
                     ;
 parameter_name:     T_WORD
                     ;
 
-// block_list:     %empty
-//                 |     block_list block
-//                 ;
-// block:          function_block | main_block | STRUCT_BLOCK
-//                 ;
+Main:               %empty
+;
+Struct:             %empty
+                    ;
 
+/* block */
+block_list:         %empty
+                    |   block_list block
+                    ;
+block:              Function | Main | Struct
+                    ;
+
+/* general rules */
 BEGIN:          T_MAIN_START | T_FUNC_START | T_WHILE_START | T_FOR_START | T_IF_START | T_SWITCH_START | T_STRUCT_START
                 ;
 
