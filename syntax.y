@@ -64,7 +64,7 @@
 
 %token      T_TYPEDEF       "typedef"
 
-%token      T_WORD          "any other element must be treated as a word"
+%token      T_WORD          "WORD"
 %token      T_UNKNOWN       "Unknown"
 %token      T_SPACE         "space"
 %token      T_NEW_LINE      "new line"
@@ -78,11 +78,13 @@
 
 %%
 
+/* Program */
 Program:            T_PROGRAM  T_SPACE program_name T_SEMICOLON T_NEW_LINE block_list T_EOF {printf("Found program!\n");}
                     ;
 program_name:       T_WORD
                     ;
 
+/* Function */
 Function:           BEGIN T_SPACE func_name T_PARNTH_OP parameter_list T_PARNTH_CL T_NEW_LINE block_list return_statement END
                     ;
 func_name:          T_WORD
@@ -98,9 +100,12 @@ return_statement:   T_RETURN T_NEW_LINE
 parameter_name:     T_WORD
                     ;
 
+/* Main */
 Main:               BEGIN T_NEW_LINE block_list END
                     ;
-Struct:             BEGIN T_NEW_LINE block_list END
+
+/* Struct */
+Struct:             BEGIN T_NEW_LINE T_VARS T_NEW_LINE variable_declarations END
                     ;
 
 /* block */
@@ -111,14 +116,25 @@ block:              Function | Main | Struct
                     ;
 
 /* general rules */
-BEGIN:          T_MAIN_START | T_FUNC_START | T_WHILE_START | T_FOR_START | T_IF_START | T_SWITCH_START | T_STRUCT_START
-                ;
+BEGIN:              T_MAIN_START | T_FUNC_START | T_WHILE_START | T_FOR_START | T_IF_START | T_SWITCH_START | T_STRUCT_START
+                    ;
 
-END:            T_MAIN_END | T_FUNC_END | T_WHILE_END | T_FOR_END | T_IF_END | T_SWITCH_END | T_STRUCT_END
-                | END T_NEW_LINE
-                ;
+END:                T_MAIN_END | T_FUNC_END | T_WHILE_END | T_FOR_END | T_IF_END | T_SWITCH_END | T_STRUCT_END
+                    |   END T_NEW_LINE
+                    ;
 
-type:           T_INT | T_CHAR | T_VOID;
+variable_declarations:
+                    variable_declaration T_SEMICOLON T_NEW_LINE
+                    |   variable_declarations variable_declarations
+                    ;
+variable_declaration:
+                    type T_SPACE variable_name
+                    | variable_declaration T_COMMA T_SPACE variable_declaration
+                    ;
+variable_name:      T_WORD
+                    ;
+
+type:               T_INT | T_CHAR | T_VOID;
 
 %%
 

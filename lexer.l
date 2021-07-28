@@ -37,8 +37,8 @@ WORD                        {ALPHA}*
 "ENDMAIN"                   { return T_MAIN_END; }
 
 "FUNCTION"                  { return T_FUNC_START; }
-"END_FUNCTION"              { return T_FUNC_END; }
 "RETURN"                    { return T_RETURN; }
+"END_FUNCTION"              { return T_FUNC_END; }
 
 "VARS"                      { return T_VARS; }
 

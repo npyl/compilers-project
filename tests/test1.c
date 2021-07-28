@@ -7,4 +7,9 @@ FUNCTION myfunc1(INT i, CHAR c)
     RETURN
 END_FUNCTION
 STARTMAIN
+    STRUCT
+    VARS
+        INT i;
+        CHAR c;
+    ENDSTRUCT
 ENDMAIN

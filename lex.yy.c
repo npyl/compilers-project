@@ -397,10 +397,10 @@ static const flex_int16_t yy_accept[155] =
 
        26,   39,   39,   39,   39,    0,   39,   31,   39,   39,
        39,   39,   39,   39,   18,   39,   25,   21,   39,   39,
-       39,   39,    0,   39,   39,   16,   39,   33,   27,   39,
+       39,   39,    0,   39,   39,   15,   39,   33,   27,   39,
        29,   13,   39,   39,   39,    0,   39,   11,   39,   35,
        39,   39,   19,    0,   14,   39,   34,   30,    0,   12,
-        0,    0,   15,    0
+        0,    0,   16,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -968,12 +968,12 @@ YY_RULE_SETUP
 case 15:
 YY_RULE_SETUP
 #line 40 "lexer.l"
-{ return T_FUNC_END; }
+{ return T_RETURN; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
 #line 41 "lexer.l"
-{ return T_RETURN; }
+{ return T_FUNC_END; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
