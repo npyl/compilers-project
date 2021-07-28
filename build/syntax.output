@@ -1,0 +1,338 @@
+Terminals unused in grammar
+
+   "INT"
+   "CHAR"
+   "VOID"
+   "."
+   ","
+   "("
+   ")"
+   "["
+   "]"
+   "program start"
+   "return"
+   "vars"
+   "then"
+   "else"
+   "elseif"
+   "case"
+   "default"
+   "print"
+   "break"
+   "typedef"
+   "Unknown"
+   "one line comment"
+   "multiline comment"
+
+
+Grammar
+
+    0 $accept: Program "EOF"
+
+    1 Program: program_name "space" ";" block_list
+
+    2 program_name: "any other element must be treated as a word"
+
+    3 block_list: %empty
+    4           | block_list block
+
+    5 block: BEGIN block_list END
+
+    6 BEGIN: "main start"
+    7      | "func"
+    8      | "while start"
+    9      | "for start"
+   10      | "if start"
+   11      | "switch"
+   12      | "struct"
+
+   13 END: "main end"
+   14    | "func end"
+   15    | "while end"
+   16    | "for end"
+   17    | "if end"
+   18    | "switch end"
+   19    | "end struct"
+
+
+Terminals, with rules where they appear
+
+"EOF" (0) 0
+error (256)
+"INT" (258)
+"CHAR" (259)
+"VOID" (260)
+"." (261)
+"," (262)
+"(" (263)
+")" (264)
+";" (265) 1
+"[" (266)
+"]" (267)
+"program start" (268)
+"main start" (269) 6
+"main end" (270) 13
+"func" (271) 7
+"func end" (272) 14
+"return" (273)
+"vars" (274)
+"while start" (275) 8
+"while end" (276) 15
+"for start" (277) 9
+"for end" (278) 16
+"if start" (279) 10
+"then" (280)
+"else" (281)
+"elseif" (282)
+"if end" (283) 17
+"switch" (284) 11
+"case" (285)
+"default" (286)
+"switch end" (287) 18
+"print" (288)
+"break" (289)
+"struct" (290) 12
+"end struct" (291) 19
+"typedef" (292)
+"any other element must be treated as a word" (293) 2
+"Unknown" (294)
+"space" (295) 1
+"one line comment" (296)
+"multiline comment" (297)
+
+
+Nonterminals, with rules where they appear
+
+$accept (43)
+    on left: 0
+Program (44)
+    on left: 1, on right: 0
+program_name (45)
+    on left: 2, on right: 1
+block_list (46)
+    on left: 3 4, on right: 1 4 5
+block (47)
+    on left: 5, on right: 4
+BEGIN (48)
+    on left: 6 7 8 9 10 11 12, on right: 5
+END (49)
+    on left: 13 14 15 16 17 18 19, on right: 5
+
+
+State 0
+
+    0 $accept: . Program "EOF"
+
+    "any other element must be treated as a word"  shift, and go to state 1
+
+    Program       go to state 2
+    program_name  go to state 3
+
+
+State 1
+
+    2 program_name: "any other element must be treated as a word" .
+
+    $default  reduce using rule 2 (program_name)
+
+
+State 2
+
+    0 $accept: Program . "EOF"
+
+    "EOF"  shift, and go to state 4
+
+
+State 3
+
+    1 Program: program_name . "space" ";" block_list
+
+    "space"  shift, and go to state 5
+
+
+State 4
+
+    0 $accept: Program "EOF" .
+
+    $default  accept
+
+
+State 5
+
+    1 Program: program_name "space" . ";" block_list
+
+    ";"  shift, and go to state 6
+
+
+State 6
+
+    1 Program: program_name "space" ";" . block_list
+
+    $default  reduce using rule 3 (block_list)
+
+    block_list  go to state 7
+
+
+State 7
+
+    1 Program: program_name "space" ";" block_list .
+    4 block_list: block_list . block
+
+    "main start"   shift, and go to state 8
+    "func"         shift, and go to state 9
+    "while start"  shift, and go to state 10
+    "for start"    shift, and go to state 11
+    "if start"     shift, and go to state 12
+    "switch"       shift, and go to state 13
+    "struct"       shift, and go to state 14
+
+    $default  reduce using rule 1 (Program)
+
+    block  go to state 15
+    BEGIN  go to state 16
+
+
+State 8
+
+    6 BEGIN: "main start" .
+
+    $default  reduce using rule 6 (BEGIN)
+
+
+State 9
+
+    7 BEGIN: "func" .
+
+    $default  reduce using rule 7 (BEGIN)
+
+
+State 10
+
+    8 BEGIN: "while start" .
+
+    $default  reduce using rule 8 (BEGIN)
+
+
+State 11
+
+    9 BEGIN: "for start" .
+
+    $default  reduce using rule 9 (BEGIN)
+
+
+State 12
+
+   10 BEGIN: "if start" .
+
+    $default  reduce using rule 10 (BEGIN)
+
+
+State 13
+
+   11 BEGIN: "switch" .
+
+    $default  reduce using rule 11 (BEGIN)
+
+
+State 14
+
+   12 BEGIN: "struct" .
+
+    $default  reduce using rule 12 (BEGIN)
+
+
+State 15
+
+    4 block_list: block_list block .
+
+    $default  reduce using rule 4 (block_list)
+
+
+State 16
+
+    5 block: BEGIN . block_list END
+
+    $default  reduce using rule 3 (block_list)
+
+    block_list  go to state 17
+
+
+State 17
+
+    4 block_list: block_list . block
+    5 block: BEGIN block_list . END
+
+    "main start"   shift, and go to state 8
+    "main end"     shift, and go to state 18
+    "func"         shift, and go to state 9
+    "func end"     shift, and go to state 19
+    "while start"  shift, and go to state 10
+    "while end"    shift, and go to state 20
+    "for start"    shift, and go to state 11
+    "for end"      shift, and go to state 21
+    "if start"     shift, and go to state 12
+    "if end"       shift, and go to state 22
+    "switch"       shift, and go to state 13
+    "switch end"   shift, and go to state 23
+    "struct"       shift, and go to state 14
+    "end struct"   shift, and go to state 24
+
+    block  go to state 15
+    BEGIN  go to state 16
+    END    go to state 25
+
+
+State 18
+
+   13 END: "main end" .
+
+    $default  reduce using rule 13 (END)
+
+
+State 19
+
+   14 END: "func end" .
+
+    $default  reduce using rule 14 (END)
+
+
+State 20
+
+   15 END: "while end" .
+
+    $default  reduce using rule 15 (END)
+
+
+State 21
+
+   16 END: "for end" .
+
+    $default  reduce using rule 16 (END)
+
+
+State 22
+
+   17 END: "if end" .
+
+    $default  reduce using rule 17 (END)
+
+
+State 23
+
+   18 END: "switch end" .
+
+    $default  reduce using rule 18 (END)
+
+
+State 24
+
+   19 END: "end struct" .
+
+    $default  reduce using rule 19 (END)
+
+
+State 25
+
+    5 block: BEGIN block_list END .
+
+    $default  reduce using rule 5 (block)

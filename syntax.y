@@ -67,6 +67,7 @@
 %token      T_WORD          "any other element must be treated as a word"
 %token      T_UNKNOWN       "Unknown"
 %token      T_SPACE         "space"
+%token      T_TAB           "tab"
 %token      T_NEW_LINE      "new line"
 
 %token      T_COMM_LINE     "one line comment"
@@ -76,21 +77,40 @@
 
 %%
 
-Program:        T_PROGRAM  T_SPACE program_name T_SEMICOLON block_list {printf("Found program!\n");}
-                ;
-program_name:   T_WORD
-                ;
-block_list:     /* nothing */
-                |     block_list block
-                ;
-block:          BEGIN block_list END
-                ;
+// Program:        T_PROGRAM  T_SPACE program_name T_SEMICOLON T_NEW_LINE block_list T_EOF {printf("Found program!\n");}
+//                 ;
+// program_name:   T_WORD
+//                 ;
+
+Function:           BEGIN T_SPACE func_name T_PARNTH_OP parameter_list T_PARNTH_CL T_NEW_LINE return_statement END
+                    ;
+func_name:          T_WORD
+                    ;
+parameter_list:     %empty
+                    | func_parameter
+                    ;
+func_parameter:     type T_SPACE parameter_name
+                    | func_parameter T_COMMA T_SPACE func_parameter
+                    ;
+return_statement:   T_TAB T_RETURN T_NEW_LINE
+                    ;
+parameter_name:     T_WORD
+                    ;
+
+// block_list:     %empty
+//                 |     block_list block
+//                 ;
+// block:          function_block | main_block | STRUCT_BLOCK
+//                 ;
 
 BEGIN:          T_MAIN_START | T_FUNC_START | T_WHILE_START | T_FOR_START | T_IF_START | T_SWITCH_START | T_STRUCT_START
                 ;
 
 END:            T_MAIN_END | T_FUNC_END | T_WHILE_END | T_FOR_END | T_IF_END | T_SWITCH_END | T_STRUCT_END
+                | END T_NEW_LINE
                 ;
+
+type:           T_INT | T_CHAR | T_VOID;
 
 %%
 
