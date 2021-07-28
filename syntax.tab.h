@@ -84,10 +84,7 @@ extern int yydebug;
     T_WORD = 293,
     T_UNKNOWN = 294,
     T_SPACE = 295,
-    T_TAB = 296,
-    T_NEW_LINE = 297,
-    T_COMM_LINE = 298,
-    T_COMM_MULT = 299
+    T_NEW_LINE = 296
   };
 #endif
 

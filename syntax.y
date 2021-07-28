@@ -67,13 +67,14 @@
 %token      T_WORD          "any other element must be treated as a word"
 %token      T_UNKNOWN       "Unknown"
 %token      T_SPACE         "space"
-%token      T_TAB           "tab"
 %token      T_NEW_LINE      "new line"
 
-%token      T_COMM_LINE     "one line comment"
-%token      T_COMM_MULT     "multiline comment"     // multi-line comment
-
 %token      T_EOF           0   "EOF"               // 0 is required
+
+// The following "would-exist" tokens are ignored:
+// %token      T_TAB           "tab"
+// %token      T_COMM_LINE     "one line comment"
+// %token      T_COMM_MULT     "multiline comment"     // multi-line comment
 
 %%
 

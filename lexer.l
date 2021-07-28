@@ -68,8 +68,8 @@ WORD                        {ALPHA}*
 
 "TYPEDEF"                   { return T_TYPEDEF; }
 
-"//"                        { skip_single_line_comment(); return T_COMM_LINE; }
-"/*"                        { skip_multiple_line_comment(); return T_COMM_MULT; }
+"//"                        { skip_single_line_comment(); }
+"/*"                        { skip_multiple_line_comment(); }
 
 "\n"                        { return T_NEW_LINE; }
 

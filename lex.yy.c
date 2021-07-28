@@ -1073,12 +1073,12 @@ YY_RULE_SETUP
 case 36:
 YY_RULE_SETUP
 #line 71 "lexer.l"
-{ skip_single_line_comment(); return T_COMM_LINE; }
+{ skip_single_line_comment(); }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
 #line 72 "lexer.l"
-{ skip_multiple_line_comment(); return T_COMM_MULT; }
+{ skip_multiple_line_comment(); }
 	YY_BREAK
 case 38:
 /* rule 38 can match eol */
