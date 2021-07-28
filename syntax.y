@@ -98,9 +98,9 @@ return_statement:   T_RETURN T_NEW_LINE
 parameter_name:     T_WORD
                     ;
 
-Main:               %empty
-;
-Struct:             %empty
+Main:               BEGIN T_NEW_LINE block_list END
+                    ;
+Struct:             BEGIN T_NEW_LINE block_list END
                     ;
 
 /* block */
