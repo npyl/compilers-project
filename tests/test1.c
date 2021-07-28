@@ -2,9 +2,9 @@
 PROGRAM test1;
 FUNCTION myfunc1(INT i, CHAR c)
     FUNCTION myfunc2(INT i2)
-        RETURN
+        RETURN 10;
     END_FUNCTION
-    RETURN
+    RETURN 0;
 END_FUNCTION
 STARTMAIN
     STRUCT

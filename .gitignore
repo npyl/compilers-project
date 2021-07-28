@@ -1,3 +1,6 @@
 a.out
 lex.yy.*
 syntax.*
+temp_auto_push.bat
+temp_interactive_push.bat
+.gitignore

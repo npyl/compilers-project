@@ -33,6 +33,7 @@ WORD                        {ALPHA}*
 ";"                         { return T_SEMICOLON; }
 "["                         { return T_BRACKT_OP; }
 "]"                         { return T_BRACKT_CL; }
+"\""                        { return T_QUOTE; }
 
 "PROGRAM"                   { return T_PROGRAM; }
 
@@ -78,9 +79,9 @@ WORD                        {ALPHA}*
 
 {WORD}                      {
                               if (digits_only(yytext)) 
-                                return T_NUMBER; 
+                                return T_NUMBER;
                               else 
-                                return T_WORD; 
+                                return T_WORD;
                             }
 " "                         { return T_SPACE; }
 "\t"|"    "                 { /* ignore tabs */ }
