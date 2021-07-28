@@ -2,7 +2,17 @@
     #include <stdio.h>
     #include <stdlib.h>
 
+    #define YYERROR_VERBOSE 1       /* this should give us more detailed error-messages instead of just "error: syntax error" */
+
+    extern int     yylineno;
+    extern char*   yytext;
+    extern int     yyleng;
+
     extern FILE* yyin;
+
+    extern int yylex();
+
+    int yyerror(const char *s);
 %}
 
 %token      T_INT           "INT"
@@ -57,16 +67,16 @@
 %token      T_WORD          "any other element must be treated as a word"
 %token      T_UNKNOWN       "Unknown"
 %token      T_SPACE         "space"
+%token      T_NEW_LINE      "new line"
 
 %token      T_COMM_LINE     "one line comment"
-%token      T_COMM_START    "multiline comment start"     // multi-line comment
-%token      T_COMM_END      "multiline comment end"     // multi-line comment
+%token      T_COMM_MULT     "multiline comment"     // multi-line comment
 
 %token      T_EOF           0   "EOF"               // 0 is required
 
 %%
 
-Program:        program_name T_SPACE T_SEMICOLON block_list {printf("Found program!\n");}
+Program:        T_PROGRAM  T_SPACE program_name T_SEMICOLON block_list {printf("Found program!\n");}
                 ;
 program_name:   T_WORD
                 ;
@@ -76,9 +86,6 @@ block_list:     /* nothing */
 block:          BEGIN block_list END
                 ;
 
-line:           T_WORD+ T_NEW_LINE
-                ;
-
 BEGIN:          T_MAIN_START | T_FUNC_START | T_WHILE_START | T_FOR_START | T_IF_START | T_SWITCH_START | T_STRUCT_START
                 ;
 
@@ -86,8 +93,6 @@ END:            T_MAIN_END | T_FUNC_END | T_WHILE_END | T_FOR_END | T_IF_END | T
                 ;
 
 %%
-
-// void print_token(int token_id);
 
 int main(int argc, char* argv[])
 {
@@ -109,18 +114,18 @@ int main(int argc, char* argv[])
     return 0;
 }
 
-void yyerror (char const *s) {
-   fprintf (stderr, "%s\n", s);
- }
+int yyerror (const char *msg) {
+   fprintf (stderr, "error: %s in line: %i with %s\n", msg, yylineno, yytext);
+}
 
-// void print_token(int token_id)
-// {
-//     if      (token_id == T_EOF)
-//         printf("End of source file!\n");
-//     else if (token_id == T_UNKNOWN)
-//         printf("Unknown token!\n");
-//     else if (token_id == T_PROGRAM)
-//         printf("Start of program!\n");
-//     else
-//         printf("%s at %d\n", yytext, token_id);
-// }
+void print_token(int token_id)
+{
+    if      (token_id == T_EOF)
+        printf("End of source file!\n");
+    else if (token_id == T_UNKNOWN)
+        printf("Unknown token!\n");
+    else if (token_id == T_PROGRAM)
+        printf("Start of program!\n");
+    else
+        printf("%s at %d\n", yytext, token_id);
+}

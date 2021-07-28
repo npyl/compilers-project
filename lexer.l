@@ -1,11 +1,10 @@
 %{
     #include <stdio.h>
     #include <stdlib.h>
-    #include "lexer.h"
+    #include "syntax.tab.h"
 
-    extern int     yylineno;
-    extern char*   yytext;
-    extern int     yyleng;
+    static void skip_single_line_comment(void);
+    static void skip_multiple_line_comment(void);
 %}
 
 %option yylineno
@@ -68,9 +67,8 @@ ALPHA                       {LETTER} | {DIGIT}
 
 "TYPEDEF"                   { return T_TYPEDEF; }
 
-"//"                        { return T_COMM_LINE; }
-"/*"                        { return T_COMM_START; }
-"*/"                        { return T_COMM_END; }
+"//"                        { skip_single_line_comment(); return T_COMM_LINE; }
+"/*"                        { skip_multiple_line_comment(); return T_COMM_MULT; }
 
 "\n"                        { return T_NEW_LINE; }
 
@@ -81,3 +79,48 @@ ALPHA                       {LETTER} | {DIGIT}
 .                           { return T_UNKNOWN; }
 
 %%
+
+static void
+skip_single_line_comment(void)
+{
+  int c;
+
+  /* Read until we find \n or EOF */
+  while((c = input()) != '\n' && c != EOF)
+    ;
+
+  /* Maybe you want to place back EOF? */
+  if(c == EOF)
+    unput(c);
+}
+
+static void
+skip_multiple_line_comment(void)
+{
+  int c;
+
+  for(;;)
+  {
+    switch(input())
+    {
+      /* We expect ending the comment first before EOF */
+      case EOF:
+        fprintf(stderr, "Error unclosed comment, expect */\n");
+        exit(-1);
+        goto done;
+      break;
+      /* Is it the end of comment? */
+      case '*':
+        if((c = input()) == '/')
+          goto done;
+        unput(c);
+        break;
+      default:
+        /* skip this character */
+        break;
+    }
+  }
+
+done:
+  /* exit entry */ ;
+}
