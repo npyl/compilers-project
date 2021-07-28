@@ -9,8 +9,8 @@ END_FUNCTION
 STARTMAIN
     STRUCT
     VARS
-        INT i, i2, i3;
-        CHAR c;
+        INT i, i2[10], i3[2];
+        CHAR c[2];
         INT i4;
     ENDSTRUCT
 ENDMAIN

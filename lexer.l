@@ -1,10 +1,13 @@
 %{
     #include <stdio.h>
+    #include <ctype.h>
     #include <stdlib.h>
     #include "syntax.tab.h"
 
     static void skip_single_line_comment(void);
     static void skip_multiple_line_comment(void);
+
+    int digits_only(const char *s);
 %}
 
 %option yylineno
@@ -73,7 +76,12 @@ WORD                        {ALPHA}*
 
 "\n"                        { return T_NEW_LINE; }
 
-{WORD}                      { return T_WORD; }
+{WORD}                      {
+                              if (digits_only(yytext)) 
+                                return T_NUMBER; 
+                              else 
+                                return T_WORD; 
+                            }
 " "                         { return T_SPACE; }
 "\t"|"    "                 { /* ignore tabs */ }
 <<EOF>>                     { return T_EOF; }
@@ -125,4 +133,13 @@ skip_multiple_line_comment(void)
 
 done:
   /* exit entry */ ;
+}
+
+int digits_only(const char *s)
+{
+    while (*s) {
+        if (isdigit(*s++) == 0) return 0;
+    }
+
+    return 1;
 }

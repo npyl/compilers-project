@@ -63,6 +63,7 @@
 %token      T_TYPEDEF       "typedef"
 
 %token      T_WORD          "WORD"
+%token      T_NUMBER        "NUMBER"
 %token      T_UNKNOWN       "Unknown"
 %token      T_SPACE         "space"
 %token      T_NEW_LINE      "new line"
@@ -126,14 +127,17 @@ variable_declarations:
                     |   variable_declarations variable_declarations
                     ;
 variable_declaration:
-                    type T_SPACE variable_name
-                    |   type T_SPACE variable_name T_COMMA T_SPACE more_variables_inline
+                    type T_SPACE variable_name variable_is_array
+                    |   type T_SPACE variable_name variable_is_array T_COMMA T_SPACE more_variables_inline
                     ;
 more_variables_inline:
-                    variable_name
-                    |   variable_name T_COMMA T_SPACE more_variables_inline
+                    variable_name variable_is_array
+                    |   variable_name variable_is_array T_COMMA T_SPACE more_variables_inline
                     ;
 variable_name:      T_WORD
+                    ;
+variable_is_array:  %empty
+                    |   T_BRACKT_OP T_NUMBER T_BRACKT_CL
                     ;
 
 type:               T_INT | T_CHAR | T_VOID;

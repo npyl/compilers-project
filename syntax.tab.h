@@ -82,9 +82,10 @@ extern int yydebug;
     T_STRUCT_END = 291,
     T_TYPEDEF = 292,
     T_WORD = 293,
-    T_UNKNOWN = 294,
-    T_SPACE = 295,
-    T_NEW_LINE = 296
+    T_NUMBER = 294,
+    T_UNKNOWN = 295,
+    T_SPACE = 296,
+    T_NEW_LINE = 297
   };
 #endif
 
