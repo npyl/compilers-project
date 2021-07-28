@@ -12,6 +12,11 @@
 %option noyywrap
 %option case-insensitive
 
+/* Iσοδυναμίες Κλάσεων */
+LETTER                      [a-zA-z]
+DIGIT                       [0-9]
+ALPHA                       {LETTER} | {DIGIT}
+
 %%
 
 "INT"                       { return T_INT; }
@@ -63,6 +68,12 @@
 
 "TYPEDEF"                   { return T_TYPEDEF; }
 
+"//"                        { return T_COMM_LINE; }
+"/*"                        { return T_COMM_START; }
+"*/"                        { return T_COMM_END; }
+
+"\n"                        { return T_NEW_LINE; }
+
 [[:alpha:]]+                { return T_WORD; }
 " "                         { return T_SPACE; }
 <<EOF>>                     { return T_EOF; }
@@ -70,44 +81,3 @@
 .                           { return T_UNKNOWN; }
 
 %%
-
-void print_token(int token_id);
-
-int main(int argc, char* argv[])
-{
-    int token;
-    if (argc > 1)
-    {
-        yyin = fopen(argv[1], "r");
-        if (yyin == NULL)
-        {
-            perror("Error opening file");
-            return -1;
-        }
-    }
-
-    /* read for tokens until T_EOF */
-    do
-    {
-        token = yylex();
-
-        /* debugging reasons */
-        print_token(token);
-    }
-    while (token != T_EOF);
-
-    fclose(yyin);
-    yyterminate();
-}
-
-void print_token(int token_id)
-{
-    if      (token_id == T_EOF)
-        printf("End of source file!\n");
-    else if (token_id == T_UNKNOWN)
-        printf("Unknown token!\n");
-    else if (token_id == T_PROGRAM)
-        printf("Start of program!\n");
-    else
-        printf("%s at %d\n", yytext, token_id);
-}

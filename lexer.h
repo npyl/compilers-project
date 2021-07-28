@@ -59,6 +59,8 @@
 #define     T_WORD          500
 #define     T_UNKNOWN       501     // for errors
 #define     T_SPACE         502
+#define     T_NEW_LINE      503
 
-#define     T_COMM_LINE     503     // one-line comment
-#define     T_COMM_MULT_LN  504     // multi-line comment
+#define     T_COMM_LINE     504     // one-line comment
+#define     T_COMM_START    505     // multi-line comment start
+#define     T_COMM_END      506     // multi-line comment end

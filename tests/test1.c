@@ -1,4 +1,8 @@
-% programma gia test anagnwrisis vasikwn keyword
+// programma gia test anagnwrisis vasikwn keyword
+
+/*
+    Anagnwrizontai kai comments!
+ */
 
 PROGRAM test1
 FUNCTION myfunc1(INT i, CHAR c)
