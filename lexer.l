@@ -12,9 +12,10 @@
 %option case-insensitive
 
 /* Iσοδυναμίες Κλάσεων */
-LETTER                      [a-zA-z]
+LETTER                      [a-zA-Z]
 DIGIT                       [0-9]
-ALPHA                       {LETTER} | {DIGIT}
+ALPHA                       ({LETTER}|{DIGIT})
+WORD                        {ALPHA}*
 
 %%
 
@@ -72,7 +73,7 @@ ALPHA                       {LETTER} | {DIGIT}
 
 "\n"                        { return T_NEW_LINE; }
 
-[[:alpha:]]+                { return T_WORD; }
+{WORD}                      { return T_WORD; }
 " "                         { return T_SPACE; }
 <<EOF>>                     { return T_EOF; }
 
